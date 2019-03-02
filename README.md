@@ -8,6 +8,13 @@ https://arxiv.org/pdf/1412.6806.pdf
 * smoothGrad
 https://arxiv.org/pdf/1706.03825.pdf
 
+## dependencies
+* torch==1.0.0
+* torchvison==0.2.1
+* cv2
+* tqdm
+
+
 ## usage
 ```
 python main.py image_path --cuda --index hoge
