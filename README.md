@@ -28,8 +28,10 @@ python main.py image_path --cuda --index hoge
 
 * add cuda option to use gpu
 * index option is the target imagenet index of gradCAM
-Please see imagenet_class_index.json (e.g. ostrich: 9, tusker: 101)
-if not specified, target index will be estimated by model
+
+  Please see imagenet_class_index.json (e.g. ostrich: 9, tusker: 101)
+  
+  If not specified, target index will be estimated by model
 
 ## examples
 ||ostrich.jpg|elephant.jpg|
