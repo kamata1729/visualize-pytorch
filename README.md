@@ -9,8 +9,9 @@ https://arxiv.org/pdf/1412.6806.pdf
 https://arxiv.org/pdf/1706.03825.pdf
 
 ## dependencies
-* torch==1.0.0
-* torchvison==0.2.1
+* Python 3.6
+* torch 1.0.0
+* torchvison 0.2.1
 * cv2
 * tqdm
 
