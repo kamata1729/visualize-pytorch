@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+from tqdm import tqdm
 import torch
 import torch.nn as nn
 from torch.nn import functional as F
@@ -21,7 +22,7 @@ class SmoothGrad():
         stdev = self.stdev_spread/(x.max() - x.min())
         std_tensor = torch.ones_like(x) * stdev
         total_gradients = torch.zeros_like(x)
-        for i in range(self.n_samples):
+        for i in tqdm(range(self.n_samples)):
             x_plus_noise = torch.normal(mean=x, std=std_tensor)
             x_plus_noise.requires_grad_()
             if self.use_cuda:

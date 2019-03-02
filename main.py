@@ -23,23 +23,27 @@ def run(image_path, index, cuda):
     ])(raw_image).unsqueeze(0)
 
     # gradCAM
+    print("gradCAM...")
     grad_cam = GradCAM(models.resnet50(pretrained=True), 'layer4.2', use_cuda=cuda)
     cam, target_index = grad_cam(image, index=index)
     cam_on_image = show_cam_on_image(raw_image/255, cam)
     cv2.imwrite("result/gradCAM_" + image_path.split('/')[-1], cam_on_image)
 
     # guidedBackProp
+    print("guidedBackProp...")
     guided_bp = GuidedBackProp(models.resnet50(pretrained=True), use_cuda=cuda)
     guided_cam, _ = guided_bp(image)
     cv2.imwrite("result/guidedbackProp_" + image_path.split('/')
                 [-1], arrange_img(guided_cam))
 
     # guidedGradCAM
+    print("guidedGradCAM...")
     guided_grad_cam = np.multiply(cam[..., None], guided_cam)
     cv2.imwrite("result/guidedGradCAM_" + image_path.split('/')
                 [-1], arrange_img(guided_grad_cam))
 
     # smoothGrad
+    print("smoothGrad...")
     smooth_grad = SmoothGrad(models.resnet50(
         pretrained=True), use_cuda=cuda, stdev_spread=0.2, n_samples=20)
     smooth_cam, _ = smooth_grad(image)
@@ -55,7 +59,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='running gradCAM, guidedBP, smoothGrad')
     parser.add_argument('image_path', help='image path')
     parser.add_argument('--cuda', action='store_true', help='add this option to use gpu')
-    parser.add_argument('--index', help='target imagenet index of gradCAM (see imagenet_class_index.json)')
+    parser.add_argument('--index', type=int, help='target imagenet index of gradCAM (see imagenet_class_index.json)')
     args = parser.parse_args()
 
     run(args.image_path, args.index, args.cuda)
