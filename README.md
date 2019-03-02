@@ -1,4 +1,4 @@
-# gradCAM on pytorch
+# gradCAM, guidedBackProp, smoothGrad on pytorch
 pytorch implementation of gradCAM, guidedBackProp, smoothGrad
 
 * gradCAM
