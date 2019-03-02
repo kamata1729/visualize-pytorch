@@ -18,6 +18,7 @@ https://arxiv.org/pdf/1706.03825.pdf
 
 ## usage
 ```
+pip install -r requirements.txt
 python main.py image_path --cuda --index hoge
 ```
 
