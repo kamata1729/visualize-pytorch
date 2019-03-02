@@ -26,11 +26,12 @@ class GradCAM():
     def save_grad(self, module, grad_in, grad_out):
         self.grad = grad_out[0].detach()
         
-    def __call__(self, input, index=None):
+    def __call__(self, x, index=None):
+        x = x.clone()
         if self.use_cuda:
-            input = input.cuda()
+            x = x.cuda()
             
-        output = self.model(input)
+        output = self.model(x)
 
         if index == None:
             index = np.argmax(output.cpu().data.numpy())
@@ -54,9 +55,7 @@ class GradCAM():
         
         cam = np.sum(self.feature_map * self.weights[:, None, None], axis=0)
         cam = np.maximum(cam, 0)
-        cam = cv2.resize(cam, (input.size()[-1], input.size()[-2]))
-        #cam = cam - np.min(cam)
-        #cam = cam / (np.max(cam) + 1e-7)
+        cam = cv2.resize(cam, (x.size()[-1], x.size()[-2]))
         return cam, index
 
 def show_cam_on_image(img, mask):

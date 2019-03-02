@@ -5,7 +5,7 @@ import torch.nn as nn
 from torch.nn import functional as F
 
 class SmoothGrad():
-    def __init__(self, model, use_cuda, stdev_spread=0.15, n_samples=10, magnitude=True, add_guided_bp=False):
+    def __init__(self, model, use_cuda, stdev_spread=0.15, n_samples=25, magnitude=True):
         self.model = model.eval()
         self.use_cuda = use_cuda
         self.stdev_spread = stdev_spread
@@ -13,15 +13,9 @@ class SmoothGrad():
         self.magnitude = magnitude
         if self.use_cuda:
             self.model = self.model.cuda()
-        if add_guided_bp:
-            for module in self.model.named_modules():
-                module[1].register_backward_hook(self.bp_relu)
-            
-    def bp_relu(self, module, grad_in, grad_out):
-        if isinstance(module, nn.ReLU):
-            return (torch.clamp(grad_in[0], min=0.0), )
     
     def __call__(self, x, index=None):
+        x = x.clone()
         if self.use_cuda:
             x = x.cuda()
         stdev = self.stdev_spread/(x.max() - x.min())

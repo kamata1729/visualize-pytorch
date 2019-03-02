@@ -18,11 +18,12 @@ class GuidedBackProp():
         if isinstance(module, nn.ReLU):
             return (torch.clamp(grad_in[0], min=0.0), )
     
-    def __call__(self, input, index=None):
+    def __call__(self, x, index=None):
+        x = x.clone()
         if self.use_cuda:
-            input = input.cuda()
-        input.requires_grad_()
-        output = self.model(input)
+            x = x.cuda()
+        x.requires_grad_()
+        output = self.model(x)
 
         if index == None:
             index = np.argmax(output.cpu().data.numpy())
@@ -37,7 +38,7 @@ class GuidedBackProp():
             one_hot = torch.sum(one_hot * output)
             
         one_hot.backward()
-        result = input.grad.cpu().numpy()[0]
+        result = x.grad.cpu().numpy()[0]
         result = np.transpose(result, (1,2,0))
         return result, index
 
